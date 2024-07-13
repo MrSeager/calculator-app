@@ -21,7 +21,7 @@ const CalcScript = () => {
 
     return (
         <Container fluid className={`cs-bg-${currTheme} cs-h d-flex flex-column justify-content-center align-items-center`}>
-            <Container className='cs-w my-5'>
+            <Container data-aos="fade-down" className='cs-w my-5'>
                 <NavbarPanel currTheme={currTheme} setCurrTheme={setCurrTheme} />
                 <Container>
                     <DisplayPanel currTheme={currTheme} numb={numb} result={result} />

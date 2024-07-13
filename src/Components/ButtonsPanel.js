@@ -33,7 +33,7 @@ const ButtonsPanel = ({ currTheme, numb, setNumb, result, setResult}) => {
             else 
                 setResult(result - parseFloat(numb));
         } else if (sign === 'x') {
-            if (prevSign === '+' || prevSign === null)
+            if (prevSign === '+')
                 setResult(result + parseFloat(numb));
             else if (prevSign === '-')
                 setResult(result - parseFloat(numb));
@@ -42,7 +42,7 @@ const ButtonsPanel = ({ currTheme, numb, setNumb, result, setResult}) => {
             else
                 setResult(result * parseFloat(numb));
         } else if (sign === '/') {
-            if (prevSign === '+' || prevSign === null)
+            if (prevSign === '+')
                 setResult(result + parseFloat(numb));
             else if (prevSign === '-')
                 setResult(result - parseFloat(numb));
@@ -51,8 +51,8 @@ const ButtonsPanel = ({ currTheme, numb, setNumb, result, setResult}) => {
             else 
                 setResult(result / parseFloat(numb));
         }
-
         setPrevSign(sign);
+        setCurrSign(sign);
         setNumb('');
     }
 
@@ -60,45 +60,39 @@ const ButtonsPanel = ({ currTheme, numb, setNumb, result, setResult}) => {
         switch (e) {
             case '+':
                 handleSign(e);
-                setCurrSign(e);
                 break;
             case '-':
                 handleSign(e);
-                setCurrSign(e);
                 break;
             case 'x':
                 handleSign(e);
-                setCurrSign(e);
                 break;
             case '/':
                 handleSign(e);
-                setCurrSign(e);
                 break;
             case '=':
                 switch (currSign) {
                     case '+':
                         setResult(result + parseFloat(numb));
                         setNumb('');
-                        setPrevSign('+');
                         break;
                     case '-':
                         setResult(result - parseFloat(numb));
                         setNumb('');
-                        setPrevSign('+');
                         break;
                     case 'x':
                         setResult(result * parseFloat(numb));
                         setNumb('');
-                        setPrevSign('+');
                         break;
                     case '/':
                         setResult(result / parseFloat(numb));
                         setNumb('');
-                        setPrevSign('+');
                         break;
                     default:
                         break;
                     }
+                    setPrevSign('+');
+                    setCurrSign(e);
                     break;
             case '.':
                 if (Number.isInteger(parseFloat(numb)))
@@ -113,77 +107,82 @@ const ButtonsPanel = ({ currTheme, numb, setNumb, result, setResult}) => {
                 setNumb(numb.substring(0, numb.length - 1));
                 break;
             default:
-                setNumb(prevNumb => prevNumb + e);
+                if (currSign === '=' && prevSign === '+') {
+                    setResult(0);
+                    setNumb(prevNumb => prevNumb + e);
+                }
+                else
+                    setNumb(prevNumb => prevNumb + e);
         }
-    } 
+    }
 
     return (
         <Container className={`rounded p-4 cs-item-2-bg-${currTheme}`}>
-                        <Row className='mb-3'>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={1} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={2} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={3} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'del'} currTheme={'text-uppercase cs-bt-1-' + currTheme} />
-                            </Col>
-                        </Row>
-                        <Row className='mb-3'>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={4} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={5} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={6} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'+'} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                        </Row>
-                        <Row className='mb-3'>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={7} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={8} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={9} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'-'} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                        </Row>
-                        <Row className='mb-3'>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'.'} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={0} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'/'} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                            <Col xs={3} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'x'} currTheme={'cs-bt-' + currTheme} />
-                            </Col>
-                        </Row>
-                        <Row className='mb-3'>
-                            <Col xs={6} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'reset'} currTheme={'text-uppercase cs-bt-1-' + currTheme} />
-                            </Col>
-                            <Col xs={6} className='px-3'>
-                                <ButtonScript handleResult={handleResult} value={'='} currTheme={'cs-bt-2-' + currTheme} />
-                            </Col>
-                        </Row>
-                    </Container>
+            <Row className='mb-3'>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={1} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={2} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={3} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'del'} currTheme={'text-uppercase cs-bt-1-' + currTheme} />
+                </Col>
+            </Row>
+            <Row className='mb-3'>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={4} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={5} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={6} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'+'} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+            </Row>
+            <Row className='mb-3'>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={7} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={8} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={9} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'-'} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+            </Row>
+            <Row className='mb-3'>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'.'} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={0} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'/'} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+                <Col xs={3} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'x'} currTheme={'cs-bt-' + currTheme} />
+                </Col>
+            </Row>
+            <Row className='mb-3'>
+                <Col xs={6} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'reset'} currTheme={'text-uppercase cs-bt-1-' + currTheme} />
+                </Col>
+                <Col xs={6} className='px-3'>
+                    <ButtonScript handleResult={handleResult} value={'='} currTheme={'cs-bt-2-' + currTheme} />
+                </Col>
+            </Row>
+        </Container>
     );
 }
 
